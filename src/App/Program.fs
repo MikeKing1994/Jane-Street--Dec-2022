@@ -104,6 +104,107 @@ let canMove game (move: (int * int)) =
             | 6 -> false
             | _ -> true
         
-let x = canMove (Game.init()) (0, 1)
+let tryMove game (move: (int * int)) : Result<Game, string> = 
+    let (x, y) = move
+    let toSquare = board |> List.find (fun s -> s.X = x && s.Y = y)
+    let scoreDifferenceRequired = toSquare.Value - game.Score
 
-printfn "%A" x
+    // Check difference is a factor of N
+    match scoreDifferenceRequired % game.N with 
+    | x when x <> 0 -> Result.Error ""
+    | _ -> 
+        let requiredDieFace = scoreDifferenceRequired/game.N
+
+        // Can we use an existing face?
+        match game.KnownFaces |> List.where (fun face -> face = requiredDieFace) with 
+        | validFaceChoices when validFaceChoices.Length > 0 -> 
+            //printfn "Concluded we can use an existing die face"
+            if toSquare.Value = 732 then failwith "game completed"
+            { game with 
+                Score = toSquare.Value
+                N = game.N + 1
+                Position = (toSquare.X, toSquare.Y)
+            } |> Result.Ok
+        | _ ->
+            // Do we have any die faces left we can allocate? 
+            match game.KnownFaces.Length with 
+            | 6 -> Result.Error ""
+            | _ -> 
+                if toSquare.Value = 732 then failwith "game completed"
+                { game with 
+                    Score = toSquare.Value
+                    N = game.N + 1
+                    Position = (toSquare.X, toSquare.Y)
+                    KnownFaces = game.KnownFaces@[requiredDieFace]
+                } |> Result.Ok
+
+module Result = 
+    let toValue = 
+        function 
+        | Result.Error _ -> failwith "got error"
+        | Result.Ok x -> x
+
+let tryAllMoves game = 
+    let allMoves = getAdjacentMoves game.Position
+    allMoves 
+    |> List.map (tryMove game)
+    |> List.where Result.isOk
+    |> List.map Result.toValue
+
+let iterate (games: Game list) = 
+    games
+    |> List.collect tryAllMoves
+
+
+let try3 = 
+    [(Game.init())]
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+    |> iterate
+
+printfn "%A" try3

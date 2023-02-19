@@ -1,0 +1,10 @@
+{
+  "version": 2,
+  "dgSpecHash": "TfSkRGRxqPT1HrXMNCqYnL+Hy1abvVvviL3WjVx9qOz5A8Z58IUbg5i8YE+KT2KwBih9dU3LYAj0SHAgMTMo+Q==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\micha\\Documents\\Github\\Jane Street\\Dec 2022\\src\\App\\src\\App\\App.fsproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\micha\\.nuget\\packages\\fsharp.core\\7.0.0\\fsharp.core.7.0.0.nupkg.sha512"
+  ],
+  "logs": []
+}
